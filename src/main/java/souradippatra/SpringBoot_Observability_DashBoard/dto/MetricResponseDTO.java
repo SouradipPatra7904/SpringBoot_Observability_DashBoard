@@ -5,11 +5,11 @@ package souradippatra.SpringBoot_Observability_DashBoard.dto;
  */
 public class MetricResponseDTO {
     private String name;
-    private double value;
+    private double counter;
 
-    public MetricResponseDTO(String name, double value) {
+    public MetricResponseDTO(String name, double counter) {
         this.name = name;
-        this.value = value;
+        this.counter = counter;
     }
 
     // Getters
@@ -17,7 +17,7 @@ public class MetricResponseDTO {
         return name;
     }
 
-    public double getValue() {
-        return value;
+    public double getCounter() {
+        return counter;
     }
 }

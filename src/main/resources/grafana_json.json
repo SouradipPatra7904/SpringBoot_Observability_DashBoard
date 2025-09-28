@@ -1,0 +1,93 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": null,
+    "title": "SpringBoot Observability Dashboard",
+    "tags": ["observability", "SpringBoot", "Prometheus"],
+    "timezone": "browser",
+    "schemaVersion": 36,
+    "version": 0,
+    "panels": [
+      {
+        "type": "graph",
+        "title": "Total Custom Requests",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "custom_requests_total",
+            "legendFormat": "Total Requests",
+            "refId": "A"
+          }
+        ],
+        "gridPos": { "x": 0, "y": 0, "w": 12, "h": 6 },
+        "options": { "legend": { "show": true } }
+      },
+      {
+        "type": "gauge",
+        "title": "Active Users",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "custom_active_users",
+            "refId": "B"
+          }
+        ],
+        "gridPos": { "x": 12, "y": 0, "w": 12, "h": 6 },
+        "options": {
+          "minValue": 0,
+          "maxValue": 50,
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        }
+      },
+      {
+        "type": "stat",
+        "title": "DB Health Status",
+        "datasource": "JSON API",
+        "targets": [
+          {
+            "refId": "C",
+            "url": "http://localhost:9595/actuator/health",
+            "jsonData": {},
+            "method": "GET"
+          }
+        ],
+        "gridPos": { "x": 0, "y": 6, "w": 24, "h": 4 },
+        "options": {
+          "valueMapping": [
+            { "value": "UP", "text": "UP", "color": "green" },
+            { "value": "DOWN", "text": "DOWN", "color": "red" }
+          ]
+        }
+      },
+      {
+        "type": "graph",
+        "title": "Request Duration (Latency)",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(custom_requests_duration_seconds_bucket[1m])) by (le))",
+            "legendFormat": "p50 Latency",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(custom_requests_duration_seconds_bucket[1m])) by (le))",
+            "legendFormat": "p95 Latency",
+            "refId": "B"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(custom_requests_duration_seconds_bucket[1m])) by (le))",
+            "legendFormat": "p99 Latency",
+            "refId": "C"
+          }
+        ],
+        "gridPos": { "x": 0, "y": 10, "w": 24, "h": 6 },
+        "options": {
+          "legend": { "show": true },
+          "tooltip": { "shared": true, "sort": 0 }
+        }
+      }
+    ]
+  },
+  "overwrite": true
+}
